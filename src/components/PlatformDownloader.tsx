@@ -288,7 +288,7 @@ export default function PlatformDownloader() {
         <div className="container mb-6">
           <div className="section-body" id="text-wrapper">
             <h2 className="text-2xl font-bold mb-4">About Our Service</h2>
-            <p className="mb-4">With ddownr.com, you can download and convert videos from countless online sources like YouTube, Twitter, Facebook, OK.ru, TikTok, and more. Its simple functionality requires you to paste the video URL, select your desired format, and click download.</p>
+            <p className="mb-4">With dkdownloder.com, you can download and convert videos from countless online sources like YouTube, Twitter, Facebook, OK.ru, TikTok, and more. Its simple functionality requires you to paste the video URL, select your desired format, and click download.</p>
             <p className="mb-4">This user-friendly tool provides a straightforward way to acquire videos from the web.</p>
             <h3 className="text-xl font-semibold mb-2">From Screen to Speaker: YouTube to MP3 320 KBPS in High Definition</h3>
             <p className="mb-4">The YouTube to MP3 320kbps downloader takes your favorite YouTube videos and turns them into amazing MP3s at 320kbps. The process is immensely safe and occurs in a flash.</p>
