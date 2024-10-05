@@ -61,7 +61,7 @@ export default function PlatformDownloader() {
   const [message, setMessage] = useState('');
   const [downloadResult, setDownloadResult] = useState<DownloadResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [displayProgress, setDisplayProgress] = useState(0);
 
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
@@ -78,6 +78,7 @@ export default function PlatformDownloader() {
 
   const handleDownload = async () => {
     setIsLoading(true);
+    setDisplayProgress(0);
     try {
       const response = await fetch(`https://ab.cococococ.com/ajax/download.php?copyright=0&format=${format}&url=${url}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`);
       const data: DownloadResult = await response.json();
@@ -97,11 +98,13 @@ export default function PlatformDownloader() {
       try {
         const response = await fetch(`https://p.oceansaver.in/ajax/progress.php?id=${id}`);
         const data: ProgressResult = await response.json();
-        // setDownloadProgress(Math.min(data.progress, 100));
-        setDownloadProgress(data.progress);
         
-        if (data.success === 1 || data.progress >= 100) {
+        // Update display progress
+        setDisplayProgress(Math.min(Math.floor(data.progress / 10), 100));
+        
+        if (data.success === 1 || data.progress >= 1000) {
           clearInterval(pollInterval);
+          setDisplayProgress(100);
           setDownloadResult(prevResult => prevResult ? {...prevResult, download_url: data.download_url} : null);
         }
       } catch (error) {
@@ -155,7 +158,7 @@ export default function PlatformDownloader() {
             </div>
             <div className="flex items-center">
               <Button onClick={toggleDarkMode} variant="ghost" size="icon" className="mr-2">
-                {darkMode ? <Sun className="h-5 w-5 text-white" /> : <Moon className="h-5 w-5 text-gray-900" color='white'/>}
+                {darkMode ? <Sun className="h-5 w-5 text-white" /> : <Moon className="h-5 w-5 text-gray-900" />}
               </Button>
             </div>
           </div>
@@ -263,16 +266,14 @@ export default function PlatformDownloader() {
                     <div className="video-title text-xl font-bold">{downloadResult.info.title}</div>
                     <p className="video-url break-words"><span className="font-bold">URL:</span> {url}</p>
                   </div>
-                  <br />
-                  <br />
-                  <a href={downloadResult.download_url} className="btn-download block mt-4 bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded relative overflow-hidden cursor-pointer	">
-                    <div className="progress absolute top-0 left-0 h-full bg-purple-800" style={{ width: `${downloadProgress}%` }}></div>
+                  <a href={downloadResult.download_url} className="btn-download block mt-4 bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded relative overflow-hidden cursor-pointer">
+                    <div className="progress absolute top-0 left-0 h-full bg-purple-800" style={{ width: `${displayProgress}%` }}></div>
                     <span className="flex items-center justify-center relative z-10">
                       <svg width="24" height="27" viewBox="0 0 24 27" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                        <path d="M8 21.0002H16C18.8284 21.0002 20.2426 21.0002 21.1213 20.1215C22 19.2429 22 17.8286 22 15.0002V14.0002C22 11.1718 22 9.7576 21.1213 8.8789C20.3529 8.11051 19.175 8.01406 17 8.00195M7 8.00195C4.82497 8.01406 3.64706 8.11051 2.87868 8.87889C2 9.7576 2 11.1718 2 14.0002V15.0002C2 17.8286 2 19.2429 2.87868 20.1215C3.17848 20.4213 3.54062 20.6188 4 20.749" stroke="#F5F6FA" strokeWidth="2"strokeLinecap="round"></path>
+                        <path d="M8 21.0002H16C18.8284 21.0002 20.2426 21.0002 21.1213 20.1215C22 19.2429 22 17.8286 22 15.0002V14.0002C22 11.1718 22 9.7576 21.1213 8.8789C20.3529 8.11051 19.175 8.01406 17 8.00195M7 8.00195C4.82497 8.01406 3.64706 8.11051 2.87868 8.87889C2 9.7576 2 11.1718 2 14.0002V15.0002C2 17.8286 2 19.2429 2.87868 20.1215C3.17848 20.4213 3.54062 20.6188 4 20.749" stroke="#F5F6FA" strokeWidth="2" strokeLinecap="round"></path>
                         <path d="M12 1V14M12 14L9 10.5M12 14L15 10.5" stroke="#F5F6FA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
                       </svg>
-                      Download to Your Device ({downloadProgress}%)
+                      Download to Your Device ({displayProgress}%)
                     </span>
                   </a>
                 </div>
@@ -284,16 +285,16 @@ export default function PlatformDownloader() {
           </Card>
         ) : null}
 
-      <Card className="p-6 mb-6">
-        <div className="container mb-6">
-          <div className="section-body" id="text-wrapper">
-            <h2 className="text-2xl font-bold mb-4">About Our Service</h2>
-            <p className="mb-4">With dkdownloder.com, you can download and convert videos from countless online sources like YouTube, Twitter, Facebook, OK.ru, TikTok, and more. Its simple functionality requires you to paste the video URL, select your desired format, and click download.</p>
-            <p className="mb-4">This user-friendly tool provides a straightforward way to acquire videos from the web.</p>
-            <h3 className="text-xl font-semibold mb-2">From Screen to Speaker: YouTube to MP3 320 KBPS in High Definition</h3>
-            <p className="mb-4">The YouTube to MP3 320kbps downloader takes your favorite YouTube videos and turns them into amazing MP3s at 320kbps. The process is immensely safe and occurs in a flash.</p>
+        <Card className="p-6 mb-6">
+          <div className="container mb-6">
+            <div className="section-body" id="text-wrapper">
+              <h2 className="text-2xl font-bold mb-4">About Our Service</h2>
+              <p className="mb-4">With dkdownloder.com, you can download and convert videos from countless online sources like YouTube, Twitter, Facebook, OK.ru, TikTok, and more. Its simple functionality requires you to paste the video URL, select your desired format, and click download.</p>
+              <p className="mb-4">This user-friendly tool provides a straightforward way to acquire videos from the web.</p>
+              <h3 className="text-xl font-semibold mb-2">From Screen to Speaker: YouTube to MP3 320 KBPS in High Definition</h3>
+              <p className="mb-4">The YouTube to MP3 320kbps downloader takes your favorite YouTube videos and turns them into amazing MP3s at 320kbps. The process is immensely safe and occurs in a flash.</p>
+            </div>
           </div>
-        </div>
         </Card>
 
         <Card className="p-6 mb-6 overflow-hidden">
