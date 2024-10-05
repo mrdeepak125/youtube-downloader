@@ -30,7 +30,7 @@ const supportedPlatforms = [
   { name: 'Facebook', icon: 'https://www.svgrepo.com/show/169503/facebook.svg?height=24&width=24' },
   { name: 'Instagram', icon: 'https://www.svgrepo.com/show/452229/instagram-1.svg?height=24&width=24' },
   { name: 'TikTok', icon: 'https://img.icons8.com/?size=100&id=118640&format=png&color=000000?height=24&width=24' },
-  { name: 'Twitter', icon: 'https://img.icons8.com/?size=100&id=phOKFKYpe00C&format=png&color=000000?height=24&width=24' },
+  { name: 'Twitter', icon: 'https://img.icons8.com/?size=100&id=5MQ0gPAYYx7a&format=png&color=000000?height=24&width=24' },
   { name: 'Vimeo', icon: 'https://www.svgrepo.com/show/25164/vimeo.svg?height=24&width=24' },
   { name: 'SoundCloud', icon: 'https://img.icons8.com/?size=100&id=13669&format=png&color=000000?height=24&width=24' },
   { name: 'Twitch', icon: 'https://img.icons8.com/?size=100&id=7qFfaszJSlTs&format=png&color=000000?height=24&width=24' },
@@ -158,7 +158,7 @@ export default function PlatformDownloader() {
             </div>
             <div className="flex items-center">
               <Button onClick={toggleDarkMode} variant="ghost" size="icon" className="mr-2">
-                {darkMode ? <Sun className="h-5 w-5 text-white" /> : <Moon className="h-5 w-5 text-gray-900" />}
+                {darkMode ? <Sun className="h-5 w-5 text-white" /> : <Moon className="h-5 w-5 text-gray-900" color='white' />}
               </Button>
             </div>
           </div>
@@ -187,7 +187,7 @@ export default function PlatformDownloader() {
                       {format} <ChevronDown className="ml-2 h-4 w-4" />
                     </Button>
                     {showFormatSelector && (
-                      <div className="absolute z-10 w-64 mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg">
+                      <div className="absolute z-10 w-64 mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg text-white">
                         <div className="grid grid-cols-2 gap-4 p-4">
                           <div>
                             <h3 className="font-semibold mb-2">Audio</h3>
@@ -266,7 +266,7 @@ export default function PlatformDownloader() {
                     <div className="video-title text-xl font-bold">{downloadResult.info.title}</div>
                     <p className="video-url break-words"><span className="font-bold">URL:</span> {url}</p>
                   </div>
-                  <a href={downloadResult.download_url} className="btn-download block mt-4 bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded relative overflow-hidden cursor-pointer">
+                  <a href={downloadResult.download_url} target='__blank' className="btn-download block mt-4 bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded relative overflow-hidden cursor-pointer">
                     <div className="progress absolute top-0 left-0 h-full bg-purple-800" style={{ width: `${displayProgress}%` }}></div>
                     <span className="flex items-center justify-center relative z-10">
                       <svg width="24" height="27" viewBox="0 0 24 27" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
