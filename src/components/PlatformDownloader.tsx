@@ -5,6 +5,8 @@ import { Textarea } from "../components/ui/textarea"
 import { Card } from "../components/ui/card"
 import { Moon, Sun, Download, ChevronDown } from 'lucide-react'
 import { motion } from 'framer-motion';
+import { toast, Toaster } from 'react-hot-toast';
+import "./loader.css";
 
 interface DownloadResult {
   info: {
@@ -62,6 +64,7 @@ export default function PlatformDownloader() {
   const [downloadResult, setDownloadResult] = useState<DownloadResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [displayProgress, setDisplayProgress] = useState(0);
+  const [isMessageSending, setIsMessageSending] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
@@ -116,15 +119,15 @@ export default function PlatformDownloader() {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsMessageSending(true);
     const emailData = {
-      from: email,
-      to: 'deepakpuri9190@gmail.com',
-      subject: subject,
-      text: message,
+      email,
+      subject,
+      message,
     };
 
     try {
-      const response = await fetch('/api/send-email', {
+      const response = await fetch('https://email-server-er04.onrender.com/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,21 +136,24 @@ export default function PlatformDownloader() {
       });
 
       if (response.ok) {
-        alert('Message sent successfully!');
+        toast.success('Message sent successfully!');
         setEmail('');
         setSubject('');
         setMessage('');
       } else {
-        alert('Failed to send message. Please try again.');
+        toast.error('Failed to send message. Please try again.');
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      alert('An error occurred. Please try again later.');
+      toast.error('An error occurred. Please try again later.');
+    } finally {
+      setIsMessageSending(false);
     }
   };
 
   return (
     <div className={`min-h-screen ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
+       <Toaster position="top-center" />
       <nav className="bg-white dark:bg-gray-800 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -298,29 +304,29 @@ export default function PlatformDownloader() {
         </Card>
 
         <Card className="p-6 mb-6 overflow-hidden">
-          <h2 className="text-2xl font-bold mb-4 text-center">What Makes Us Special</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                className="feature-item relative p-6 bg-gray-800 rounded-lg overflow-hidden"
-                whileHover={{
-                  scale: 1.05,
-                  backgroundImage: `url("data:image/svg+xml,<svg width='222' height='247' viewBox='0 0 222 247' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='171' cy='171' r='170.25' stroke='white' stroke-opacity='.12' stroke-width='1.5'/><circle cx='195' cy='210' r='146.25' stroke='white' stroke-opacity='.12' stroke-width='1.5'/><circle cx='195' cy='230' r='97.25' stroke='white' stroke-opacity='.12' stroke-width='1.5'/></svg>")`,
-                  backgroundColor: 'rgb(108 92 231)',
-                  backgroundSize: "400px"
-                }}
-                initial={{ backgroundImage: 'none' }}
-              >
-                <div className="feature-counter bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center mb-2">
-                  {feature.counter}
-                </div>
-                <div className="feature-name text-lg font-semibold mb-2 text-white">{feature.name}</div>
-                <div className="feature-desc text-gray-300">{feature.desc}</div>
-              </motion.div>
-            ))}
-          </div>
-        </Card>
+        <h2 className="text-2xl font-bold mb-4 text-center">What Makes Us Special</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              className="feature-item relative p-6 bg-gray-800 rounded-lg overflow-hidden"
+              whileHover={{
+                scale: 1.05,
+                background: `url("data:image/svg+xml,<svg width='222' height='247' viewBox='0 0 222 247' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='171' cy='171' r='170.25' stroke='white' stroke-opacity='.12' stroke-width='1.5'/><circle cx='195' cy='210' r='146.25' stroke='white' stroke-opacity='.12' stroke-width='1.5'/><circle cx='195' cy='230' r='97.25' stroke='white' stroke-opacity='.12' stroke-width='1.5'/></svg>") rgb(108 92 231)`,
+                backgroundSize: "cover",
+                backgroundPosition: "center"
+              }}
+              initial={{ background: 'none' }}
+            >
+              <div className="feature-counter bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center mb-2">
+                {feature.counter}
+              </div>
+              <div className="feature-name text-lg font-semibold mb-2 text-white">{feature.name}</div>
+              <div className="feature-desc text-gray-300">{feature.desc}</div>
+            </motion.div>
+          ))}
+        </div>
+      </Card> 
       </main>
 
       <footer className="bg-gray-800 text-white py-12">
@@ -352,8 +358,19 @@ export default function PlatformDownloader() {
               className="w-full bg-gray-700 text-white"
               rows={6}
             />
-            <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white">
-              Send Message
+            <Button 
+              type="submit" 
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white relative"
+              disabled={isMessageSending}
+            >
+              {isMessageSending ? (
+                <>
+                  <span className="loader"></span>
+                  <span className="opacity-0">Send Message</span>
+                </>
+              ) : (
+                'Send Message'
+              )}
             </Button>
           </form>
         </div>
