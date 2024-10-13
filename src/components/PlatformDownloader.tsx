@@ -308,6 +308,7 @@ export default function PlatformDownloader() {
                   scale: 1.05,
                   backgroundImage: `url("data:image/svg+xml,<svg width='222' height='247' viewBox='0 0 222 247' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='171' cy='171' r='170.25' stroke='white' stroke-opacity='.12' stroke-width='1.5'/><circle cx='195' cy='210' r='146.25' stroke='white' stroke-opacity='.12' stroke-width='1.5'/><circle cx='195' cy='230' r='97.25' stroke='white' stroke-opacity='.12' stroke-width='1.5'/></svg>")`,
                   backgroundColor: 'rgb(108 92 231)',
+                  backgroundSize: "400px"
                 }}
                 initial={{ backgroundImage: 'none' }}
               >
