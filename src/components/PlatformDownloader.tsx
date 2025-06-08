@@ -83,7 +83,7 @@ export default function PlatformDownloader() {
     setIsLoading(true);
     setDisplayProgress(0);
     try {
-      const response = await fetch(`https://ab.cococococ.com/ajax/download.php?copyright=0&format=${format}&url=${url}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`);
+      const response = await fetch(`https://p.oceansaver.in/ajax/download.php?copyright=0&format=${format}&url=${url}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`);
       const data: DownloadResult = await response.json();
       setDownloadResult(data);
       setIsLoading(false);
